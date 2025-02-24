@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "dogs.apps.DogsConfig",
+    "api.apps.ApiConfig",
 ]
 
 MIDDLEWARE = [
