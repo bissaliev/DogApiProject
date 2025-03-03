@@ -1,8 +1,53 @@
 from django.db import models
+from django.db.models import Avg, Count, QuerySet
+
+
+class DogQueryset(QuerySet):
+    """Кастомный QuerySet для модели Dog"""
+
+    def get_with_count_dogs(self) -> QuerySet:
+        """Добавляет количество собак той же породы для каждой собаки.
+
+        Returns:
+            Queryset: QuerySet с аннотацией count_breed_dogs, содержащей
+            количество собак той же породы.
+        """
+        return self.annotate(count_breed_dogs=Count("breed__dogs"))
+
+    def with_avg_age_by_breed(self) -> QuerySet:
+        """Добавляет средний возраст собак для каждой породы к списку собак.
+
+        Returns:
+            Queryset: QuerySet с аннотацией avg_breed_age, содержащей
+            средний возраст собак той же породы.
+        """
+        return self.annotate(avg_breed_age=Avg("breed__dogs__age"))
+
+
+class BreedQuerySet(QuerySet):
+    """Кастомный QuerySet для модели Breed"""
+
+    def with_dog_count(self) -> QuerySet:
+        """Добавляет количество собак для каждой породы
+
+        Returns:
+            Queryset: QuerySet с аннотацией count_dogs, содержащей
+            количество собак той же породы.
+        """
+        return self.annotate(count_dogs=Count("dogs"))
 
 
 class Breed(models.Model):
-    """Модель пород собак"""
+    """Модель пород собак
+
+    Attributes:
+        name (str): Название породы.
+        size (str): Размер породы (Tiny, Small, Medium, Large).
+        friendliness (int): Уровень дружелюбия (1-5).
+        trainability (int): Уровень обучаемости (1-5).
+        shedding_amount (int): Уровень линьки (1-5).
+        exercise_needs (int): Уровень активности (1-5).
+    """
 
     class SizeChoices(models.TextChoices):
         TINY = "Tiny", "Tiny"
@@ -12,21 +57,14 @@ class Breed(models.Model):
 
     RATING_CHOICES = [(i, i) for i in range(1, 6)]
 
-    name = models.CharField("название породы", max_length=255, db_index=True)
-    size = models.CharField(
-        "размер",
-        choices=SizeChoices.choices,
-        max_length=6,
-        default=SizeChoices.MEDIUM,
-    )
-    friendliness = models.IntegerField("дружелюбность", choices=RATING_CHOICES)
-    trainability = models.IntegerField("обучаемость", choices=RATING_CHOICES)
-    shedding_amount = models.IntegerField(
-        "уровень линьки", choices=RATING_CHOICES
-    )
-    exercise_needs = models.IntegerField(
-        "потребность в активности", choices=RATING_CHOICES
-    )
+    name = models.CharField("название породы", max_length=255, unique=True)
+    size = models.CharField("размер", choices=SizeChoices.choices, max_length=6, default=SizeChoices.MEDIUM)
+    friendliness = models.PositiveSmallIntegerField("дружелюбность", choices=RATING_CHOICES)
+    trainability = models.PositiveSmallIntegerField("обучаемость", choices=RATING_CHOICES)
+    shedding_amount = models.PositiveSmallIntegerField("уровень линьки", choices=RATING_CHOICES)
+    exercise_needs = models.PositiveSmallIntegerField("потребность в активности", choices=RATING_CHOICES)
+
+    objects = BreedQuerySet.as_manager()
 
     class Meta:
         verbose_name = "Порода"
@@ -37,29 +75,31 @@ class Breed(models.Model):
 
 
 class Dog(models.Model):
-    """Модель собак"""
+    """Модель собак
+
+    Attributes:
+        name (str): Имя собаки.
+        age (int): Возраст собаки в годах.
+        breed (Breed): Порода собаки (внешний ключ на модель Breed).
+        gender (str): Пол собаки (Male,Female).
+        color (str): Окрас собаки.
+        favorite_food (str): Любимая еда собаки.
+        favorite_toy (str): Любимая игрушка собаки.
+    """
 
     class GenderChoice(models.TextChoices):
         MALE = "Male", "Male"
         FEMALE = "Female", "Female"
 
     name = models.CharField("имя", max_length=255, db_index=True)
-    age = models.IntegerField("возраст")
-    breed = models.ForeignKey(
-        "Breed",
-        on_delete=models.CASCADE,
-        related_name="dogs",
-        verbose_name="порода",
-    )
-    gender = models.CharField(
-        "пол",
-        max_length=6,
-        choices=GenderChoice.choices,
-        default=GenderChoice.MALE,
-    )
+    age = models.PositiveIntegerField("возраст")
+    breed = models.ForeignKey("Breed", on_delete=models.CASCADE, related_name="dogs", verbose_name="порода")
+    gender = models.CharField("пол", max_length=6, choices=GenderChoice.choices, default=GenderChoice.MALE)
     color = models.CharField("окрас", max_length=50)
     favorite_food = models.CharField("любимая еда", max_length=255)
     favorite_toy = models.CharField("любимая игрушка", max_length=255)
+
+    objects = DogQueryset.as_manager()
 
     class Meta:
         verbose_name = "Собака"
