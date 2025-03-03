@@ -1,7 +1,7 @@
-from api.serializers import BreedSerializer, DogSerializer
-from django.db.models import Avg, Count
-from dogs.models import Breed, Dog
 from rest_framework.viewsets import ModelViewSet
+
+from api.serializers import BreedSerializer, DogSerializer
+from dogs.models import Breed, Dog
 
 
 class DogViewSet(ModelViewSet):
@@ -11,11 +11,9 @@ class DogViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.action == "list":
-            queryset = queryset.annotate(avg_breed_age=Avg("breed__dogs__age"))
+            queryset = queryset.with_avg_age_by_breed()
         if self.action == "retrieve":
-            queryset = queryset.annotate(
-                count_breed_dogs=Count("breed__dogs__id")
-            )
+            queryset = queryset.get_with_count_dogs()
         return queryset
 
 
@@ -25,5 +23,5 @@ class BreedViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.annotate(count_dogs=Count("dogs"))
+        queryset = queryset.with_dog_count()
         return queryset
