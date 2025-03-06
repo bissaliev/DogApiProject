@@ -1,0 +1,26 @@
+[
+{
+    "model": "dogs.breed",
+    "pk": 1,
+    "fields": {
+        "name": "Мопс",
+        "size": "Tiny",
+        "friendliness": 5,
+        "trainability": 1,
+        "shedding_amount": 2,
+        "exercise_needs": 1
+    }
+},
+{
+    "model": "dogs.breed",
+    "pk": 2,
+    "fields": {
+        "name": "Такса",
+        "size": "Small",
+        "friendliness": 5,
+        "trainability": 4,
+        "shedding_amount": 5,
+        "exercise_needs": 5
+    }
+}
+]

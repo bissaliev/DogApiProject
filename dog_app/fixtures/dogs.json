@@ -1,0 +1,80 @@
+[
+{
+    "model": "dogs.dog",
+    "pk": 1,
+    "fields": {
+        "name": "Лупоглазик",
+        "age": 7,
+        "breed": 1,
+        "gender": "Male",
+        "color": "Коричневый",
+        "favorite_food": "Вискас",
+        "favorite_toy": "Косточка"
+    }
+},
+{
+    "model": "dogs.dog",
+    "pk": 2,
+    "fields": {
+        "name": "Сосиска",
+        "age": 9,
+        "breed": 2,
+        "gender": "Female",
+        "color": "Бело-коричневый",
+        "favorite_food": "Телятина",
+        "favorite_toy": "мячик"
+    }
+},
+{
+    "model": "dogs.dog",
+    "pk": 3,
+    "fields": {
+        "name": "Пупс",
+        "age": 2,
+        "breed": 1,
+        "gender": "Female",
+        "color": "Серый",
+        "favorite_food": "Виноград",
+        "favorite_toy": "мячик"
+    }
+},
+{
+    "model": "dogs.dog",
+    "pk": 4,
+    "fields": {
+        "name": "Charly",
+        "age": 5,
+        "breed": 1,
+        "gender": "Male",
+        "color": "grey",
+        "favorite_food": "breaf",
+        "favorite_toy": "toy"
+    }
+},
+{
+    "model": "dogs.dog",
+    "pk": 5,
+    "fields": {
+        "name": "Рекс",
+        "age": 6,
+        "breed": 1,
+        "gender": "Male",
+        "color": "Черный",
+        "favorite_food": "Свинина",
+        "favorite_toy": "Косточка"
+    }
+},
+{
+    "model": "dogs.dog",
+    "pk": 6,
+    "fields": {
+        "name": "Рексик",
+        "age": 6,
+        "breed": 2,
+        "gender": "Male",
+        "color": "Черный",
+        "favorite_food": "Свинина",
+        "favorite_toy": "Косточка"
+    }
+}
+]
