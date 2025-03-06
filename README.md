@@ -11,11 +11,13 @@
 - **Маршрутизация**: Использует DRF-роутеры в `api/urls.py`.
 - **Контейнеризация**: Поддержка Docker и Docker Compose.
 
-## Требования
+## Стек
 
-- Python 3.8+
-- PostgreSQL 12+
+- Python 3.12
+- PostgreSQL 15
 - Docker (опционально)
+- Django 5.1
+- Django Rest Framework 3.15
 
 ## Установка и запуск
 
